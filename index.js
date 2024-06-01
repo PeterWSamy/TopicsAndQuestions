@@ -1,4 +1,5 @@
 const express = require("express")
+const cors = require("cors")
 require('dotenv').config();
 
 const app = express();
@@ -8,6 +9,9 @@ const questionsRoutes = require("./routes/routes.js")
 const initConnection = require("./helpers/config.js")
 initConnection()
 
+app.use(cors({
+    origin: '*'
+  }));
 app.use(express.json())
 app.use("",questionsRoutes)
 
