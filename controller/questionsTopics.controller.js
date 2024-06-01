@@ -2,9 +2,63 @@ const questionsModel = require("../models/questions.model")
 const topicsModel = require("../models/topics.model")
 const readJson = require("../helpers/reader")
 
-var questions
 
-const search = (question) => {
+async function searchQuestionsBfs(questionTopic) {
+    const topic = await topicsModel.findOne({ topicName: questionTopic });
+    if (!topic) {
+        return [];
+    }
+
+    let questionsSet = new Set();
+    let visitedTopics = new Set();
+    let topicsQueue = [topic];
+
+    const initialQuestions = await questionsModel.find({ Annotations: questionTopic });
+    initialQuestions.forEach(q => questionsSet.add(q.questionNumber));
+
+    while (topicsQueue.length > 0) {
+        const currentTopic = topicsQueue.shift();
+
+        if (visitedTopics.has(currentTopic._id.toString())) {
+            continue;
+        }
+        visitedTopics.add(currentTopic._id.toString());
+
+        const childrenTopics = await topicsModel.find({ _id: { $in: currentTopic.children } });
+
+        topicsQueue.push(...childrenTopics);
+
+        const questionsPromises = childrenTopics.map(child => questionsModel.find({ Annotations: child.topicName }));
+        const questionsArrays = await Promise.all(questionsPromises);
+
+        questionsArrays.forEach(questionsArray => {
+            questionsArray.forEach(question => questionsSet.add(question.questionNumber));
+        });
+    }
+
+    return Array.from(questionsSet);
+}
+
+
+const search = () => {
+    return async (req, res, next) => {
+        let { q } = req.query
+
+        try {
+            let questionNumbers = await searchQuestionsBfs(q)
+
+            res.status(200).json({
+                status: "success",
+                questionNumbers: questionNumbers
+            })
+
+        } catch (err) {
+            console.error(err)
+            res.status(500).json({
+                status: "failed",
+            })
+        }
+    }
 
 }
 
@@ -70,7 +124,7 @@ const addQuestion = () => {
     return async (req, res, next) => {
 
         // read questions form json to insert it into the database
-        questions = await readJson("questions.json")
+        let questions = await readJson("questions.json")
         console.log(questions[0])
         try {
             questions.forEach(async question => {
