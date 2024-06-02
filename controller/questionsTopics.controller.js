@@ -8,7 +8,7 @@ const getFirst10Questions = () => {
             const questions = await questionsModel.find({ questionNumber: { $in : [1,2,3,5,6,9,8,7,4,10]}})
             res.status(200).json({
                 status: "success",
-                questions: questionss
+                questions: questions
             })
         } catch (error) {
             console.error(error)
