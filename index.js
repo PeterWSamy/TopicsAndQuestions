@@ -1,10 +1,9 @@
 const express = require("express")
 const cors = require("cors")
-const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 7895;
 const questionsRoutes = require("./routes/routes.js")
 
 const initConnection = require("./helpers/config.js")
@@ -13,7 +12,6 @@ initConnection()
 app.use(cors({
     origin: '*'
 }));
-app.use(bodyParser.json({ limit: '50mb' }));
 
 app.use(express.json())
 app.use("", questionsRoutes)
