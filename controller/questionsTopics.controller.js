@@ -2,6 +2,22 @@ const questionsModel = require("../models/questions.model")
 const topicsModel = require("../models/topics.model")
 const readJson = require("../helpers/reader")
 
+const getFirst10Questions = () => {
+    return async (req,res,next) => {
+        try {
+            const questions = await questionsModel.find({ questionNumber: { $in : [1,2,3,5,6,9,8,7,4,10]}})
+            res.status(200).json({
+                status: "success",
+                questions: questionss
+            })
+        } catch (error) {
+            console.error(error)
+            res.status(500).json({
+                status: "failed to fetch"
+            })
+        }
+    }
+}
 
 async function searchQuestionsBfs(questionTopic) {
     const topic = await topicsModel.findOne({ topicName: questionTopic });
@@ -159,4 +175,4 @@ const addQuestion = () => {
     }
 }
 
-module.exports = { search, addQuestion, addTopics }
+module.exports = { search, addQuestion, addTopics , getFirst10Questions}
