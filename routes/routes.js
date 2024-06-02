@@ -1,10 +1,10 @@
 const router = require("express").Router()
 
-const {search,addQuestion, addTopics, first10Quests} = require("../controller/questionsTopics.controller")
+const {search,addQuestion, addTopics, getFirst10Questions} = require("../controller/questionsTopics.controller")
 
 
 router.get("/search",search())
-router.get("/first10Quests",first10Quests())
+router.get("/first10Quests",getFirst10Questions())
 router.post("/addQuestion",addQuestion())
 router.post("/addTopics",addTopics())
 
