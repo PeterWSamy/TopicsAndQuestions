@@ -2,6 +2,8 @@
 
 This project demonstrates the structure and usage of a MongoDB schema for managing topics and questions. It includes endpoints for querying questions based on topic names.
 
+You can try it live using this URL : `https://peterwsamy.github.io/TopicsAndQuestionsFront.github.io/`
+
 ## Schema Explanation
 
 ### Topic Schema
@@ -44,9 +46,9 @@ The `questions` collection stores questions with their annotations. Each questio
 
 ## Sample search request
 
-URL for the deployed version : `https://topics-and-questions.vercel.app`
+endpoint for the deployed version : `https://topics-and-questions.vercel.app`
 
-SAMPLE URL : `https://topics-and-questions.vercel.app/search?q=Cell Structure and Organisation`
+SAMPLE endpoint for testing : `https://topics-and-questions.vercel.app/search?q=Cell Structure and Organisation`
 #### Response
 ```json
 {
