@@ -41,3 +41,70 @@ The `questions` collection stores questions with their annotations. Each questio
         "__v":{"$numberInt":"0"}
 }
 ```
+
+## Sample search request
+
+URL for the deployed version : `https://topics-and-questions.vercel.app`
+
+SAMPLE URL : `https://topics-and-questions.vercel.app/search?q=Cell Structure and Organisation`
+#### Response
+```json
+{
+    "status": "success",
+    "questionNumbers": [
+        94,
+        176,
+        3,
+        82,
+        156,
+        15,
+        48,
+        87,
+        190,
+        7,
+        66,
+        164,
+        21,
+        8,
+        76,
+        83,
+        142,
+        188,
+        118,
+        184,
+        19,
+        23,
+        50,
+        115,
+        64,
+        163,
+        41,
+        45,
+        100,
+        11,
+        59,
+        2,
+        123,
+        189,
+        96,
+        121,
+        105,
+        132,
+        139,
+        117,
+        171,
+        196,
+        56,
+        147
+    ]
+}
+```
+
+## Optimizations
+
+After firstly running the query it took more than 10 seconds to return a response which is unefficient ofcourse. After carefull considerations I saw that the bottleneck was getting all questions and search in annotations array which has large latencies and bulky IO requests in the database.
+
+### SOLUTION
+
+I added a search index in my database on questions collection which basically helps in searching text rather than brute force solution to query all the questions.
+This change managed to make the query execute in a total of 5 secs for the root nodes while milli seconds for children.
